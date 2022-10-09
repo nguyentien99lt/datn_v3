@@ -1,18 +1,23 @@
 package com.services.iml;
 
-import com.clients.requests.FindByPageRequest;
-import com.clients.responses.FindByPageResponse;
-import com.entities.OrderEntity;
-import com.repositories.IOrderRepository;
-import com.services.IService;
+import java.util.List;
+import java.util.Optional;
+
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import com.clients.requests.FindByPageRequest;
+import com.clients.responses.FindByPageResponse;
+import com.dto.OrderDTO;
+import com.dto.OrderInterface;
+import com.entities.OrderEntity;
+import com.repositories.IOrderRepository;
+import com.services.IService;
 
 @Service
 public class ImlOrderService implements IService<OrderEntity> {
@@ -20,6 +25,28 @@ public class ImlOrderService implements IService<OrderEntity> {
 
     @Autowired
     private IOrderRepository orderRepository;
+
+    public FindByPageResponse<OrderInterface> listAll(OrderDTO dto, Pageable pageable)
+    {
+//    	Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        Integer firstResult = (pageable.getPageNumber() * pageable.getPageSize());
+        Integer maxResults = (pageable.getPageSize());
+
+        List<OrderInterface> listData = orderRepository.findByOrder(dto.getName(), dto.getPhone(), firstResult, maxResults);
+
+        int totalCount = orderRepository.totalCountByOrder(dto.getName(), dto.getPhone());
+        Page<OrderInterface> page = (Page<OrderInterface>) new PageImpl<OrderInterface>(
+                listData, pageable, totalCount);
+        List<OrderInterface> list = page.getContent();
+        FindByPageResponse<OrderInterface> reponse = new FindByPageResponse<OrderInterface>();
+        reponse.setPageResponse(list);
+        reponse.setPageSize(page.getSize());
+        reponse.setCurrentPage(page.getNumber());
+        reponse.setTotalPage(page.getTotalPages());
+        reponse.setTotalElement(page.getTotalElements());
+        return reponse;
+    }
 
     @Override
     public OrderEntity create(OrderEntity orderEntity) {

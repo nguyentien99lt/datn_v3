@@ -5,13 +5,15 @@ import com.clients.responses.FindByPageResponse;
 import com.entities.BrandEntity;
 import com.services.iml.ImlBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@RestController
+@ResponseBody
 @RequestMapping("/brand")
 @CrossOrigin("*")
+@Controller
 public class BrandController {
     @Autowired
     private ImlBrandService brandService;

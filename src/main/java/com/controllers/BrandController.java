@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@ResponseBody
+@RestController
 @RequestMapping("/brand")
 @CrossOrigin("*")
-@Controller
 public class BrandController {
     @Autowired
     private ImlBrandService brandService;

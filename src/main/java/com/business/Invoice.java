@@ -1,8 +1,7 @@
 package com.business;
 
 public class Invoice {
-
-    /// xử lý conflict
+    
 
 
     /// Đẩy mẫu nhé

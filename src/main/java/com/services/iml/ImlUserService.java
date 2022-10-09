@@ -1,10 +1,8 @@
 package com.services.iml;
 
-import com.clients.requests.FindByPageRequest;
-import com.clients.responses.FindByPageResponse;
-import com.entities.UserEntity;
-import com.repositories.IUserRepository;
-import com.services.IService;
+import java.util.List;
+import java.util.Optional;
+
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,8 +10,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.clients.requests.FindByPageRequest;
+import com.clients.responses.FindByPageResponse;
+import com.dto.UserDTO;
+import com.entities.UserEntity;
+import com.repositories.IUserRepository;
+import com.services.IService;
 
 @Service
 public class ImlUserService implements IService<UserEntity> {
@@ -21,10 +23,21 @@ public class ImlUserService implements IService<UserEntity> {
     @Autowired
     private IUserRepository userRepository;
 
-    public  UserEntity findByName(String name){
 
-        return  userRepository.findByName(name);
+    public FindByPageResponse<UserEntity> listAll(UserDTO dto,Integer pageNumber , Integer pageSize)
+    {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<UserEntity> page = userRepository.find(dto.getName(), dto.getStatus(), dto.getPhone(), pageable);
+        List<UserEntity> list = page.getContent();
+        FindByPageResponse<UserEntity> reponse = new FindByPageResponse();
+        reponse.setPageResponse(list);
+        reponse.setPageSize(page.getSize());
+        reponse.setCurrentPage(page.getNumber());
+        reponse.setTotalPage(page.getTotalPages());
+        reponse.setTotalElement(page.getTotalElements());
+        return reponse;
     }
+
     @Override
     public UserEntity create(UserEntity userEntity) {
         return userRepository.save(userEntity);
@@ -102,4 +115,6 @@ public class ImlUserService implements IService<UserEntity> {
             return null;
         }
     }
+
+
 }

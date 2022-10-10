@@ -13,4 +13,6 @@ public interface IUserRepository extends JpaRepository<UserEntity, Integer> {
 
     @Query(value = "select * from users where name like concat('%', :name, '%') and status = :status and phone like concat('%', :phone, '%')", nativeQuery = true)
     Page<UserEntity> find (@Param("name") String name, Integer status, String phone, Pageable pageable);
-}
+
+    @Query(value = "SELECT * FROM  users u WHERE u.email = ?", nativeQuery = true)
+    UserEntity findbyemail(String email);}

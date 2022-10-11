@@ -18,8 +18,8 @@ public class UserEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "username") //đổi name thành username
+    private String username;
 
     @Column(name = "full_name")
     private String fullName;
@@ -42,10 +42,5 @@ public class UserEntity {
     @Column(name = "status")
     private Integer status = 1;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private RoleEntity role;
-
-
-
+    //bỏ role_id vì không cần đến
 }

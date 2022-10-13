@@ -3,6 +3,8 @@ package com.controllers;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,23 +42,44 @@ public class UserController {
     }
 
     @GetMapping("/read-by-id/{id}")
-    public Optional<UserEntity> readById(@PathVariable Integer id) {
-        return userService.readById(id);
+    public ResponseEntity<Optional<UserEntity>> readById(@PathVariable Integer id) throws Exception {
+
+        try {
+            userService.readById(id);
+            return ResponseEntity.ok().body(userService.readById(id));
+        }catch (Exception e){
+            throw  new Exception("Bản ghi không tồn tại");
+        }
     }
 
     @PostMapping("/create")
-    public UserEntity create(@RequestBody UserEntity user) {
-        return userService.create(user);
+    public ResponseEntity<UserEntity> create(@RequestBody UserEntity user) throws  Exception {
+        try {
+            userService.create(user);
+            return ResponseEntity.ok().body(user);
+        }catch (Exception e){
+            throw new Exception("Create Failed");
+        }
     }
 
     @PutMapping("/update")
-    public UserEntity update(@RequestBody UserEntity user) {
-        return userService.update(user);
+    public ResponseEntity<UserEntity> update(@RequestBody UserEntity user) throws Exception {
+        try {
+            userService.update(user);
+            return ResponseEntity.ok().body(user);
+        }catch (Exception e){
+            throw  new Exception("Update Failed");
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public UserEntity delete(@PathVariable Integer id) {
-        return userService.delete(id);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<UserEntity> delete(@PathVariable Integer id) throws Exception {
+        try {
+            userService.delete(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }catch (Exception e){
+            throw new Exception("Delete Failed");
+        }
     }
 
     @PostMapping("/search")

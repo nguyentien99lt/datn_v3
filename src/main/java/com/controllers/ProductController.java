@@ -4,7 +4,10 @@ import com.clients.requests.FindByPageRequest;
 import com.clients.responses.FindByPageResponse;
 import com.entities.ProductEntity;
 import com.services.iml.ImlProductService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -27,23 +30,44 @@ public class ProductController {
 
     }
 
-    @GetMapping("/{id}")
-    public Optional<ProductEntity> readById(@PathVariable Integer id) {
-        return productService.readById(id);
+    @GetMapping("/readById/{id}")
+    public ResponseEntity<Optional<ProductEntity>> readById(@PathVariable Integer id) throws Exception {
+        try {
+            productService.readById(id);
+            return ResponseEntity.ok().body(productService.readById(id));
+        }catch (Exception e){
+            throw new Exception("Bản ghi không tồn tại");
+        }
     }
 
     @PostMapping("/create")
-    public ProductEntity create(@RequestBody ProductEntity product) {
-        return productService.create(product);
+    public ResponseEntity<ProductEntity> create(@RequestBody ProductEntity product) throws Exception {
+        try {
+            productService.create(product);
+            return ResponseEntity.ok().body(product);
+        }catch (Exception e){
+            throw new Exception("Create Failed");
+
+        }
     }
 
     @PutMapping("/update")
-    public ProductEntity update(@RequestBody ProductEntity product) {
-        return productService.update(product);
+    public ResponseEntity<ProductEntity> update(@RequestBody ProductEntity product) throws Exception {
+        try {
+            productService.update(product);
+            return ResponseEntity.ok().body(product);
+        }catch (Exception e){
+            throw  new Exception("Update Failed");
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public ProductEntity delete(@PathVariable Integer id) {
-        return productService.delete(id);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ProductEntity> delete(@PathVariable Integer id) throws Exception {
+        try {
+            productService.delete(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }catch (Exception e){
+            throw  new Exception("Delete Failed");
+        }
     }
 }

@@ -6,6 +6,8 @@ import com.clients.responses.FindByPageResponse;
 import com.entities.ProductDetailEntity;
 import com.services.iml.ImlProductDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -29,24 +31,44 @@ public class ProductDetailController {
 
     }
 
-    @GetMapping("/{id}")
-    public Optional<ProductDetailEntity> readById(@PathVariable Integer id) {
-        return productDetailService.readById(id);
+    @GetMapping("/readById/{id}")
+    public ResponseEntity<Optional<ProductDetailEntity>> readById(@PathVariable Integer id) throws Exception {
+        try {
+            productDetailService.readById(id);
+            return ResponseEntity.ok().body(productDetailService.readById(id));
+        }catch (Exception e){
+            throw  new Exception("Bản ghi không tồn tại");
+        }
     }
 
     @PostMapping("/create")
-    public ProductDetailEntity create(@RequestBody ProductDetailEntity productDetail) {
-        return productDetailService.create(productDetail);
+    public ResponseEntity<ProductDetailEntity> create(@RequestBody ProductDetailEntity productDetail) throws Exception {
+        try {
+            productDetailService.create(productDetail);
+            return ResponseEntity.ok().body(productDetail);
+        }catch (Exception e){
+            throw new Exception("Create Failed");
+        }
     }
 
     @PutMapping("/update")
-    public ProductDetailEntity update(@RequestBody ProductDetailEntity productDetail) {
-        return productDetailService.update(productDetail);
+    public ResponseEntity<ProductDetailEntity> update(@RequestBody ProductDetailEntity productDetail) throws Exception {
+        try {
+            productDetailService.update(productDetail);
+            return ResponseEntity.ok().body(productDetail);
+        }catch (Exception e){
+            throw  new Exception("Update Failed");
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public ProductDetailEntity delete(@PathVariable Integer id) {
-        return productDetailService.delete(id);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ProductDetailEntity> delete(@PathVariable Integer id) throws Exception {
+        try {
+            productDetailService.delete(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }catch (Exception e){
+            throw new Exception("Delete Failed");
+        }
     }
 
     @PostMapping("/search-by-name")

@@ -5,6 +5,8 @@ import com.clients.responses.FindByPageResponse;
 import com.entities.BrandEntity;
 import com.services.iml.ImlBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,24 +31,44 @@ public class BrandController {
 
     }
 
-    @GetMapping("/{id}")
-    public Optional<BrandEntity> readById(@PathVariable Integer id) {
-        return brandService.readById(id);
+    @GetMapping("/readByID/{id}")
+    public ResponseEntity<Optional<BrandEntity>> readById(@PathVariable Integer id) throws Exception {
+        try {
+            brandService.readById(id);
+            return ResponseEntity.ok().body(brandService.readById(id));
+        }catch (Exception e){
+            throw new Exception("Bản ghi không tồn tại");
+        }
     }
 
     @PostMapping("/create")
-    public BrandEntity create(@RequestBody BrandEntity brand) {
-        return brandService.create(brand);
+    public ResponseEntity<BrandEntity> create(@RequestBody BrandEntity brand)throws Exception {
+        try {
+            brandService.create(brand);
+            return ResponseEntity.ok().body(brand);
+        }catch (Exception e){
+            throw new Exception("Create Failed");
+        }
     }
 
     @PutMapping("/update")
-    public BrandEntity update(@RequestBody BrandEntity brand) {
-        return brandService.update(brand);
+    public ResponseEntity<BrandEntity> update(@RequestBody BrandEntity brand)throws Exception {
+        try {
+            brandService.update(brand);
+            return ResponseEntity.ok().body(brand);
+        }catch (Exception e){
+            throw  new Exception("Update Failed");
+        }
     }
 
     @DeleteMapping("/{id}")
-    public BrandEntity delete(@PathVariable Integer id) {
-        return brandService.delete(id);
+    public ResponseEntity<BrandEntity> delete(@PathVariable Integer id) throws Exception {
+        try {
+            brandService.delete(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }catch (Exception e){
+            throw new Exception("Delete Failed");
+        }
     }
 
 

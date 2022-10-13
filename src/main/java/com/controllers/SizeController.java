@@ -5,6 +5,8 @@ import com.clients.responses.FindByPageResponse;
 import com.entities.SizeEntity;
 import com.services.iml.ImlSizeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -27,23 +29,44 @@ public class SizeController {
 
     }
 
-    @GetMapping("/{id}")
-    public Optional<SizeEntity> readById(@PathVariable Integer id) {
-        return sizeService.readById(id);
+    @GetMapping("/readById/{id}")
+    public ResponseEntity<Optional<SizeEntity>> readById(@PathVariable Integer id) throws Exception {
+
+        try {
+            sizeService.readById(id);
+            return ResponseEntity.ok().body(sizeService.readById(id));
+        }catch (Exception e){
+            throw new Exception("Bản ghi không tồn tại");
+        }
     }
 
     @PostMapping("/create")
-    public SizeEntity create(@RequestBody SizeEntity size) {
-        return sizeService.create(size);
+    public ResponseEntity<SizeEntity> create(@RequestBody SizeEntity size) throws Exception {
+        try {
+            sizeService.create(size);
+            return  ResponseEntity.ok().body(size);
+        }catch (Exception e){
+            throw new Exception("Create Failed");
+        }
     }
 
     @PutMapping("/update")
-    public SizeEntity update(@RequestBody SizeEntity size) {
-        return sizeService.update(size);
+    public ResponseEntity<SizeEntity> update(@RequestBody SizeEntity size) throws  Exception {
+        try {
+            sizeService.update(size);
+            return ResponseEntity.ok().body(size);
+        }catch (Exception e){
+            throw new Exception("Update Failed");
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public SizeEntity delete(@PathVariable Integer id) {
-        return sizeService.delete(id);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<SizeEntity> delete(@PathVariable Integer id) throws  Exception {
+        try {
+            sizeService.delete(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }catch (Exception e){
+            throw  new Exception("Delete Failed");
+        }
     }
 }

@@ -5,6 +5,8 @@ import com.clients.responses.FindByPageResponse;
 import com.entities.ColorEntity;
 import com.services.iml.ImlColorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -27,23 +29,43 @@ public class ColorController {
 
     }
 
-    @GetMapping("/{id}")
-    public Optional<ColorEntity> readById(@PathVariable Integer id) {
-        return colorService.readById(id);
+    @GetMapping("/readByID/{id}")
+    public ResponseEntity<Optional<ColorEntity>> readById(@PathVariable Integer id) throws Exception {
+        try {
+            colorService.readById(id);
+            return ResponseEntity.ok().body(colorService.readById(id));
+        }catch (Exception e){
+            throw new Exception("Bản ghi không tồn tại");
+        }
     }
 
     @PostMapping("/create")
-    public ColorEntity create(@RequestBody ColorEntity color) {
-        return colorService.create(color);
+    public ResponseEntity<ColorEntity> create(@RequestBody ColorEntity color)throws  Exception {
+        try {
+            colorService.create(color);
+            return ResponseEntity.ok().body(color);
+        }catch (Exception e){
+            throw  new Exception("Create Failed");
+        }
     }
 
     @PutMapping("/update")
-    public ColorEntity update(@RequestBody ColorEntity color) {
-        return colorService.update(color);
+    public ResponseEntity<ColorEntity> update(@RequestBody ColorEntity color)throws Exception {
+        try {
+            colorService.update(color);
+            return ResponseEntity.ok().body(color);
+        }catch (Exception e){
+            throw  new Exception("Update Failed");
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public ColorEntity delete(@PathVariable Integer id) {
-        return colorService.delete(id);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ColorEntity> delete(@PathVariable Integer id)throws  Exception {
+        try {
+            colorService.delete(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }catch (Exception e){
+            throw new Exception("Delete Failed");
+        }
     }
 }

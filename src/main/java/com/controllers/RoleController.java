@@ -5,6 +5,8 @@ import com.clients.responses.FindByPageResponse;
 import com.entities.RoleEntity;
 import com.services.iml.ImlRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -28,23 +30,44 @@ public class RoleController {
 
     }
 
-    @GetMapping("/{id}")
-    public Optional<RoleEntity> readById(@PathVariable Integer id) {
-        return roleService.readById(id);
+    @GetMapping("/readById/{id}")
+    public ResponseEntity<Optional<RoleEntity>> readById(@PathVariable Integer id) throws Exception {
+
+        try {
+            roleService.readById(id);
+            return ResponseEntity.ok().body(roleService.readById(id));
+        }catch (Exception e){
+            throw  new Exception("Bản ghi không tồn tại");
+        }
     }
 
     @PostMapping("/create")
-    public RoleEntity create(@RequestBody RoleEntity role) {
-        return roleService.create(role);
+    public ResponseEntity<RoleEntity> create(@RequestBody RoleEntity role) throws Exception {
+        try {
+            roleService.create(role);
+            return ResponseEntity.ok().body(role);
+        }catch (Exception e){
+            throw new Exception("Create Failed");
+        }
     }
 
     @PutMapping("/update")
-    public RoleEntity update(@RequestBody RoleEntity role) {
-        return roleService.update(role);
+    public ResponseEntity<RoleEntity> update(@RequestBody RoleEntity role) throws Exception {
+        try {
+            roleService.update(role);
+            return ResponseEntity.ok().body(role);
+        }catch (Exception e){
+            throw new Exception("Update Failed");
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public RoleEntity delete(@PathVariable Integer id) {
-        return roleService.delete(id);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<RoleEntity> delete(@PathVariable Integer id) throws Exception {
+        try {
+            roleService.delete(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }catch (Exception e){
+            throw new Exception("Delete Failed");
+        }
     }
 }

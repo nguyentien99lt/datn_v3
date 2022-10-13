@@ -6,6 +6,7 @@ import com.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class ChangePassWordService {
 
@@ -21,6 +22,7 @@ public class ChangePassWordService {
                 user.setPassword(changePassWord.getNewPassWord());
 
                 return userRepository.save(user);
+
             }
         }
 

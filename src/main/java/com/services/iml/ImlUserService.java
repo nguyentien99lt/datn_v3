@@ -1,7 +1,10 @@
 package com.services.iml;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import com.services.IService;
 @Service
 public class ImlUserService implements IService<UserEntity> {
 
+    private static final long EXPIRE_TOKEN_AFTER_MINUTES = 30;
     @Autowired
     private IUserRepository userRepository;
 
@@ -37,6 +41,57 @@ public class ImlUserService implements IService<UserEntity> {
         reponse.setTotalElement(page.getTotalElements());
         return reponse;
     }
+    public String forgotPassword(String email) {
+
+        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
+
+        if (!userOptional.isPresent()) {
+            return "Invalid email id.";
+        }
+
+        UserEntity user = userOptional.get();
+        user.setToken(generateToken());
+        user.setTokenCreationDate(LocalDateTime.now());
+
+        user = userRepository.save(user);
+
+        return user.getToken();
+    }
+
+    public String resetPassword(String token,String password) {
+
+        Optional<UserEntity> userOptional = userRepository.findByToken(token);
+
+        if (!userOptional.isPresent()) {
+            return "Invalid token.";
+        }
+        LocalDateTime tokenCreationDate = userOptional.get().getTokenCreationDate();
+        if (isTokenExpired(tokenCreationDate)) {
+            return "Token expired.";
+        }
+
+        UserEntity user = userOptional.get();
+        user.setPassword(password);
+
+        userRepository.save(user);
+
+        return "Your password successfully updated.";
+    }
+
+    private String generateToken() {
+        StringBuilder token = new StringBuilder();
+
+        return token.append(UUID.randomUUID().toString())
+                .append(UUID.randomUUID().toString()).toString();
+    }
+    private boolean isTokenExpired(final LocalDateTime tokenCreationDate) {
+
+        LocalDateTime now = LocalDateTime.now();
+        Duration diff = Duration.between(tokenCreationDate, now);
+
+        return diff.toMinutes() >= EXPIRE_TOKEN_AFTER_MINUTES;
+    }
+
 
     @Override
     public UserEntity create(UserEntity userEntity) {

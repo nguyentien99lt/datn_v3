@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 
@@ -24,9 +25,10 @@ public class ProductDetailController {
     public FindByPageResponse<ProductDetailEntity> findByPage(@RequestBody FindByPageRequest finByPageRequest) {
         return productDetailService.findByPage(finByPageRequest);
     }
+
     @GetMapping("/find-by-page")
     public FindByPageResponse<ProductDetailEntity> findByPage(@RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
-                                                     @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+                                                              @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         return productDetailService.findByPageParam(pageNumber, pageSize);
 
     }
@@ -36,28 +38,28 @@ public class ProductDetailController {
         try {
             productDetailService.readById(id);
             return ResponseEntity.ok().body(productDetailService.readById(id));
-        }catch (Exception e){
-            throw  new Exception("Bản ghi không tồn tại");
+        } catch (Exception e) {
+            throw new Exception("Bản ghi không tồn tại");
         }
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ProductDetailEntity> create(@RequestBody ProductDetailEntity productDetail) throws Exception {
+    public ResponseEntity<ProductDetailEntity> create(@Valid @RequestBody ProductDetailEntity productDetail) throws Exception {
         try {
             productDetailService.create(productDetail);
             return ResponseEntity.ok().body(productDetail);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new Exception("Create Failed");
         }
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ProductDetailEntity> update(@RequestBody ProductDetailEntity productDetail) throws Exception {
+    public ResponseEntity<ProductDetailEntity> update(@Valid @RequestBody ProductDetailEntity productDetail) throws Exception {
         try {
             productDetailService.update(productDetail);
             return ResponseEntity.ok().body(productDetail);
-        }catch (Exception e){
-            throw  new Exception("Update Failed");
+        } catch (Exception e) {
+            throw new Exception("Update Failed");
         }
     }
 
@@ -66,7 +68,7 @@ public class ProductDetailController {
         try {
             productDetailService.delete(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new Exception("Delete Failed");
         }
     }
@@ -74,31 +76,35 @@ public class ProductDetailController {
     @PostMapping("/search-by-name")
     public FindByPageResponse<ProductDetailEntity> searchByName(@RequestBody ProductDetailRequest productDetailRequest,
                                                                 @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
-                                                                @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize){
-        return productDetailService.findByName(productDetailRequest,pageNumber, pageSize);
+                                                                @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        return productDetailService.findByName(productDetailRequest, pageNumber, pageSize);
     }
+
     @PostMapping("/search-by-size")
     public FindByPageResponse<ProductDetailEntity> searchBySize(@RequestBody ProductDetailRequest productDetailRequest,
-                                                                  @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
-                                                                  @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize){
-        return productDetailService.findBySize(productDetailRequest,pageNumber, pageSize);
+                                                                @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+                                                                @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        return productDetailService.findBySize(productDetailRequest, pageNumber, pageSize);
     }
+
     @PostMapping("/search-by-price")
     public FindByPageResponse<ProductDetailEntity> searchByPrice(@RequestBody ProductDetailRequest productDetailRequest,
-                                                                  @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
-                                                                  @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize){
-        return productDetailService.findByPrice(productDetailRequest,pageNumber, pageSize);
+                                                                 @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+                                                                 @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        return productDetailService.findByPrice(productDetailRequest, pageNumber, pageSize);
     }
+
     @PostMapping("/search-by-color")
     public FindByPageResponse<ProductDetailEntity> searchByColor(@RequestBody ProductDetailRequest productDetailRequest,
-                                                                  @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
-                                                                  @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize){
-        return productDetailService.findByColor(productDetailRequest,pageNumber, pageSize);
+                                                                 @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+                                                                 @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        return productDetailService.findByColor(productDetailRequest, pageNumber, pageSize);
     }
+
     @PostMapping("/search-by-brand-name")
     public FindByPageResponse<ProductDetailEntity> searchByBrandName(@RequestBody ProductDetailRequest productDetailRequest,
-                                                                  @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
-                                                                  @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize){
-        return productDetailService.findByBrand(productDetailRequest,pageNumber, pageSize);
+                                                                     @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+                                                                     @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        return productDetailService.findByBrand(productDetailRequest, pageNumber, pageSize);
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -41,7 +42,7 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ProductEntity> create(@RequestBody ProductEntity product) throws Exception {
+    public ResponseEntity<ProductEntity> create( @Valid @RequestBody ProductEntity product) throws Exception {
         try {
             productService.create(product);
             return ResponseEntity.ok().body(product);
@@ -52,7 +53,7 @@ public class ProductController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ProductEntity> update(@RequestBody ProductEntity product) throws Exception {
+    public ResponseEntity<ProductEntity> update( @Valid @RequestBody ProductEntity product) throws Exception {
         try {
             productService.update(product);
             return ResponseEntity.ok().body(product);

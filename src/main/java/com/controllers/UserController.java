@@ -22,6 +22,8 @@ import com.dto.UserDTO;
 import com.entities.UserEntity;
 import com.services.iml.ImlUserService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/user")
 @CrossOrigin
@@ -53,7 +55,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<UserEntity> create(@RequestBody UserEntity user) throws  Exception {
+    public ResponseEntity<UserEntity> create( @Valid @RequestBody UserEntity user) throws  Exception {
         try {
             userService.create(user);
             return ResponseEntity.ok().body(user);
@@ -63,7 +65,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<UserEntity> update(@RequestBody UserEntity user) throws Exception {
+    public ResponseEntity<UserEntity> update( @Valid @RequestBody UserEntity user) throws Exception {
         try {
             userService.update(user);
             return ResponseEntity.ok().body(user);

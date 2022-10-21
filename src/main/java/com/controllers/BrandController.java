@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @ResponseBody
@@ -42,7 +43,7 @@ public class BrandController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<BrandEntity> create(@RequestBody BrandEntity brand)throws Exception {
+    public ResponseEntity<BrandEntity> create(@Valid @RequestBody BrandEntity brand)throws Exception {
         try {
             brandService.create(brand);
             return ResponseEntity.ok().body(brand);
@@ -52,7 +53,7 @@ public class BrandController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<BrandEntity> update(@RequestBody BrandEntity brand)throws Exception {
+    public ResponseEntity<BrandEntity> update(@Valid @RequestBody BrandEntity brand)throws Exception {
         try {
             brandService.update(brand);
             return ResponseEntity.ok().body(brand);

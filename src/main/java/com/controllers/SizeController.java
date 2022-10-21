@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -41,7 +42,7 @@ public class SizeController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<SizeEntity> create(@RequestBody SizeEntity size) throws Exception {
+    public ResponseEntity<SizeEntity> create(@Valid @RequestBody SizeEntity size) throws Exception {
         try {
             sizeService.create(size);
             return  ResponseEntity.ok().body(size);
@@ -51,7 +52,7 @@ public class SizeController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<SizeEntity> update(@RequestBody SizeEntity size) throws  Exception {
+    public ResponseEntity<SizeEntity> update(@Valid @RequestBody SizeEntity size) throws  Exception {
         try {
             sizeService.update(size);
             return ResponseEntity.ok().body(size);

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 
@@ -42,7 +43,7 @@ public class RoleController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<RoleEntity> create(@RequestBody RoleEntity role) throws Exception {
+    public ResponseEntity<RoleEntity> create( @Valid @RequestBody RoleEntity role) throws Exception {
         try {
             roleService.create(role);
             return ResponseEntity.ok().body(role);
@@ -52,7 +53,7 @@ public class RoleController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<RoleEntity> update(@RequestBody RoleEntity role) throws Exception {
+    public ResponseEntity<RoleEntity> update( @Valid @RequestBody RoleEntity role) throws Exception {
         try {
             roleService.update(role);
             return ResponseEntity.ok().body(role);

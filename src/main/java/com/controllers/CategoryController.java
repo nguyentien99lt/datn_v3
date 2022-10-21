@@ -22,6 +22,8 @@ import com.dto.CategoryDTO;
 import com.entities.CategoryEntity;
 import com.services.iml.ImlCategoryService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/category")
 @CrossOrigin
@@ -52,9 +54,7 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CategoryEntity> create(@RequestBody CategoryEntity category) throws Exception {
-
-
+    public ResponseEntity<CategoryEntity> create( @Valid @RequestBody CategoryEntity category) throws Exception {
         try {
              categoryService.create(category);
             return ResponseEntity.ok().body(category);
@@ -64,7 +64,7 @@ public class CategoryController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<CategoryEntity> update(@RequestBody CategoryEntity category) throws Exception {
+    public ResponseEntity<CategoryEntity> update( @Valid @RequestBody CategoryEntity category) throws Exception {
 
         try {
             categoryService.update(category);

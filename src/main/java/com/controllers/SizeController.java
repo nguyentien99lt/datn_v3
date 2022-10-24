@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/size")
+@RequestMapping("/admin/size")
 @CrossOrigin
 public class SizeController {
     @Autowired

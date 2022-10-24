@@ -21,7 +21,7 @@ import com.entities.CategoryEntity;
 import com.services.iml.ImlCategoryService;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/admin/category")
 @CrossOrigin
 public class CategoryController {
 

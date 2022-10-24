@@ -20,13 +20,6 @@ import com.services.UserService;
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class Config extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    UserService accountService;
-
-    @Autowired
-    HttpSession session;
-
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
@@ -34,23 +27,30 @@ public class Config extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).csrf().disable();
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/order/**")
-                .authenticated().antMatchers("/admin/**")
-                .hasAnyRole("ADM", "STA")
-                .antMatchers("/rest/authorities")
-                .hasRole("ADM").anyRequest().permitAll();
+        http.authorizeRequests()
+                .antMatchers("/order/**").authenticated()
+                .antMatchers("/admin/user/update", "/admin/cart-detail/update").hasAuthority("MEMBER")
+                //update lai thong tin, gio hang cua minh
+                .antMatchers("/admin/**").hasAnyAuthority("ADMIN", "STAFF")
+                .antMatchers("/author/**").hasAuthority("ADMIN")
+                .anyRequest().permitAll();
+
 
         http.formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/security/login")
-                .defaultSuccessUrl("/security/login/success", false)
-                .failureUrl("/security/login/error");
+                .defaultSuccessUrl("/home", false)
+                .failureUrl("/login");
 
-        http.rememberMe().tokenValiditySeconds(86400);
+        http.rememberMe()
+                .tokenValiditySeconds(86400);
 
-        http.exceptionHandling().accessDeniedPage("/unauthoried");
+        http.exceptionHandling()
+                .accessDeniedPage("/unauthoried");
 
-        http.logout().logoutUrl("/logoff").logoutSuccessUrl("/logoff/success");
+        http.logout()
+                .logoutUrl("/logoff")
+                .logoutSuccessUrl("/logoff/success");
     }
 
     // Cơ chế mã hóa mật khẩu

@@ -35,7 +35,7 @@ public class UserImpl implements UserService {
             if (null != user.getRoles())
                 user.getRoles().forEach(r -> {
                     authorities.add(r.getRole_id());
-                    r.getPermissions().forEach(p -> authorities.add(p.getAuthor_id()));
+                    r.getAuthorities().forEach(p -> authorities.add(p.getAuthor_id()));
                 });
             userPrincipal.setUserId(user.getId());
             userPrincipal.setUsername(user.getUsername());
@@ -54,7 +54,7 @@ public class UserImpl implements UserService {
             if (null != user.getRoles())
                 user.getRoles().forEach(r -> {
                     authorities.add(r.getRole_id());
-                    r.getPermissions().forEach(p -> authorities.add(p.getAuthor_id()));
+                    r.getAuthorities().forEach(p -> authorities.add(p.getAuthor_id()));
                 });
             userPrincipal.setUserId(user.getId());
             userPrincipal.setUsername(user.getUsername());

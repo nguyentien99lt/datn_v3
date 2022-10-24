@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import lombok.extern.slf4j.Slf4j;
 
 import com.entities.Token;
 import com.entities.Users;
@@ -22,6 +24,7 @@ import com.security.UserPrincipal;
 import com.services.TokenService;
 import com.services.UserService;
 
+@Slf4j
 @RestController
 public class AuthController {
     @Autowired
@@ -33,11 +36,17 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @PostMapping("/register")
+    public Users create(@RequestBody Users user) {
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        return userService.createUser(user);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Users user) {
-        UserPrincipal userPrincipal = userService.findByEmail(user.getEmail());
+        UserPrincipal userPrincipal = userService.findByUsername(user.getUsername());
         if (null == user || !new BCryptPasswordEncoder().matches(user.getPassword(), userPrincipal.getPassword())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("tài khoản hoặc mật khẩu không chính xác");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tài khoản hoặc mật khẩu không chính xác");
         }
         Token token = new Token();
         token.setToken(jwtUtil.generateToken(userPrincipal));
@@ -46,40 +55,34 @@ public class AuthController {
         return ResponseEntity.ok(token.getToken());
     }
 
-    @GetMapping("/hello")
-    @PreAuthorize("hasAnyAuthority('USERS_READ')")
-    public ResponseEntity hello(){
-        return ResponseEntity.ok("hello");
-    }
-
-    @RequestMapping("/login/form")
+    @RequestMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("message", "Vui lòng đăng nhập!");
-        return "security/login";
+        return "Vui lòng đăng nhập!";
     }
 
     @RequestMapping("/login/success")
     public String loginSuccess(Model model) {
         model.addAttribute("message", "Đăng nhập thành công!");
-        return "home";
+        return "Đăng nhập thành công!";
     }
 
     @RequestMapping("/login/error")
     public String loginError(Model model) {
         model.addAttribute("message", "Sai thông tin đăng nhập!");
-        return "security/login/error";
+        return "Sai thông tin đăng nhập!";
     }
 
     @RequestMapping("/unauthoried")
     public String unauthoried(Model model) {
         model.addAttribute("message", "Không có quyền truy xuất!");
-        return "security/login";
+        return "Không có quyền truy cập!";
     }
 
     @RequestMapping("/logoff/success")
     public String logoffSuccess(Model model) {
         model.addAttribute("message", "Bạn đã đăng xuất!");
-        return "security/login";
+        return "Bạn đã đăng xuất!";
     }
 
     @CrossOrigin("*")

@@ -21,7 +21,7 @@ import com.entities.UserEntity;
 import com.services.iml.ImlUserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/admin/user")
 @CrossOrigin
 public class UserController {
 

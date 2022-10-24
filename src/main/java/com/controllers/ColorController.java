@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/color")
+@RequestMapping("/admin/color")
 @CrossOrigin
 public class ColorController {
     @Autowired

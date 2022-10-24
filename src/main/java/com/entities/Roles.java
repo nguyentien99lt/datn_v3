@@ -18,5 +18,5 @@ public class Roles extends BaseEntity {
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "role_author", joinColumns = {@JoinColumn(name = "role_id")}, inverseJoinColumns = {@JoinColumn(name = "author_id")})
-    private Set<Authorities> permissions = new HashSet<>();
+    private Set<Authorities> authorities = new HashSet<>();
 }

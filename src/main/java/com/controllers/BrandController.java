@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @ResponseBody
-@RequestMapping("/brand")
+@RequestMapping("/admin/brand")
 @CrossOrigin("*")
 @Controller
 public class BrandController {

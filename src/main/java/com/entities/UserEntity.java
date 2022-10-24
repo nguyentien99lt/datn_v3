@@ -3,6 +3,8 @@ package com.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -42,5 +44,7 @@ public class UserEntity {
     @Column(name = "status")
     private Integer status = 1;
 
-    //bỏ role_id vì không cần đến
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private Set<Roles> roles = new HashSet<>();
 }

@@ -2,9 +2,8 @@ package com.controllers;
 
 import java.util.Optional;
 
-import com.dto.ForgotPasswordEmailDTO;
-import com.dto.ForgotPasswordTokenDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,20 +68,6 @@ public class UserController {
         return	userService.listAll(dto, pageNumber, pageSize);
     }
 
-    @PostMapping("/forgot-password")
-    public String forgotPassword(@RequestBody ForgotPasswordEmailDTO req) {
 
-        String response = userService.forgotPassword(req.getEmail());
-
-        if (!response.startsWith("Invalid")) {
-            response = "http://localhost:8080/user/reset-password?token=" + response;
-        }
-        return response;
-    }
-
-    @PutMapping("/reset-password")
-    public String resetPassword(@RequestBody ForgotPasswordTokenDTO req) {
-        return  userService.resetPassword(req.getToken(), req.getPassword());
-    }
 
 }

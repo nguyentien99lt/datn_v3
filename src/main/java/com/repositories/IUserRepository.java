@@ -22,6 +22,7 @@ public interface IUserRepository extends JpaRepository<UserEntity, Integer> {
     Optional<UserEntity> findByEmail(String email);
 
     Optional<UserEntity> findByToken(String token);
+
 }
 
 

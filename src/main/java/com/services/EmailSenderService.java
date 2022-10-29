@@ -1,5 +1,9 @@
 package com.services;
 
+import com.dto.SendMailResponse;
+
 public interface EmailSenderService {
-    String sendEmail(String to, String subject, String message,String email);
+    SendMailResponse<String> sendEmail(String to, String subject, String message, String email);
+
+    SendMailResponse<Boolean> resetPassword(String token,String password);
 }

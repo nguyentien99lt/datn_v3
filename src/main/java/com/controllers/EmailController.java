@@ -3,6 +3,7 @@ package com.controllers;
 import com.dto.ForgotPasswordEmailDTO;
 import com.dto.ForgotPasswordTokenDTO;
 
+import com.dto.SendMailResponse;
 import com.entities.UserEntity;
 import com.repositories.IUserRepository;
 import com.resoucre.EmailMessage;
@@ -10,39 +11,47 @@ import com.services.EmailSenderService;
 
 import com.services.iml.ImlUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.services.iml.EmailSenderSeviceImpl;
 import org.springframework.web.bind.annotation.*;
-
-
-
 
 @RestController
 @CrossOrigin
 public class EmailController {
 
-    private final EmailSenderService emailSenderService;
+    @Autowired
+    private EmailSenderService emailSenderService;
+
     @Autowired
     private IUserRepository userRepository;
 
-    @Autowired
-    private EmailSenderSeviceImpl emailSenderSevice;
+//    @Autowired
+//    private EmailSenderSeviceImpl emailSenderSevice;
 
-    public EmailController(EmailSenderService emailSenderService) {
-        this.emailSenderService = emailSenderService;
-    }
+//    public EmailController(EmailSenderService emailSenderService) {
+//        this.emailSenderService = emailSenderService;
+//    }
 
 
     @PostMapping("/forgot-password")
-    public ResponseEntity sendEmail(@RequestBody EmailMessage emailMessage, ForgotPasswordEmailDTO req){
+    public ResponseEntity<SendMailResponse<String>> sendEmail(@RequestBody EmailMessage emailMessage, ForgotPasswordEmailDTO req){
 
-        this.emailSenderService.sendEmail(emailMessage.getTo(), emailMessage.getSubject(), emailMessage.getMessage(),emailMessage.getEmail());
-        return ResponseEntity.ok("Success");
+        SendMailResponse<String> result = emailSenderService.sendEmail(emailMessage.getTo(), emailMessage.getSubject(), emailMessage.getMessage(),emailMessage.getEmail());
+       if (result.getMessage().equalsIgnoreCase("Success")) {
+           return ResponseEntity
+                   .status(HttpStatus.OK)
+                   .body(result);
+       } else {
+           return ResponseEntity
+                   .status(HttpStatus.OK)
+                   .body(result);
+       }
     }
 
     @PutMapping("/reset-password")
-    public String resetPassword(@RequestBody ForgotPasswordTokenDTO req) {
-        return  emailSenderSevice.resetPassword(req.getToken(), req.getPassword());
+    public SendMailResponse<Boolean> resetPassword(@RequestBody ForgotPasswordTokenDTO req) {
+        return  emailSenderService.resetPassword(req.getToken(), req.getPassword());
     }
 
 }

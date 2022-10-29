@@ -1,5 +1,6 @@
 package com.services.iml;
 
+import com.dto.SendMailResponse;
 import com.entities.UserEntity;
 import com.repositories.IUserRepository;
 import com.services.EmailSenderService;
@@ -27,40 +28,29 @@ public class EmailSenderSeviceImpl implements EmailSenderService {
         this.mailSender = mailSender;
     }
 
-    public String forgotPassword(String email) {
-
-        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
-
-        if (!userOptional.isPresent()) {
-            return "Invalid email id.";
-        }
-
-        UserEntity user = userOptional.get();
-        user.setToken(generateToken());
-        user.setTokenCreationDate(LocalDateTime.now());
-
-        user = userRepository.save(user);
-        return user.getToken();
-    }
-
-    public String resetPassword(String token,String password) {
+    @Override
+    public SendMailResponse<Boolean> resetPassword(String token,String password) {
 
         Optional<UserEntity> userOptional = userRepository.findByToken(token);
 
         if (!userOptional.isPresent()) {
-            return "Invalid token.";
+//            return "Invalid token.";
+            return new SendMailResponse<>("Invalid token.", false);
         }
+
         LocalDateTime tokenCreationDate = userOptional.get().getTokenCreationDate();
         if (isTokenExpired(tokenCreationDate)) {
-            return "Token expired.";
+//            return "Token expired.";
+            return new SendMailResponse<>("Token expired.", false);
         }
+
 
         UserEntity user = userOptional.get();
         user.setPassword(password);
-
         userRepository.save(user);
-
-        return "Your password successfully updated.";
+//        userRepository.delete(user);
+//        return "Success";
+        return new SendMailResponse<>("Success.", true);
     }
     private String generateToken() {
         StringBuilder token = new StringBuilder();
@@ -75,9 +65,10 @@ public class EmailSenderSeviceImpl implements EmailSenderService {
         return diff.toMinutes() >= EXPIRE_TOKEN_AFTER_MINUTES;
     }
 
-    String token_mail = generateToken();
+
     @Override
-    public String sendEmail(String to, String subject, String message,String email) {
+    public SendMailResponse<String> sendEmail(String to, String subject, String message, String email) {
+        String token_mail = generateToken();
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom("sendmaildatn@gmail.com");
@@ -88,7 +79,7 @@ public class EmailSenderSeviceImpl implements EmailSenderService {
         Optional<UserEntity> userOptional = userRepository.findByEmail(email);
 
         if (!userOptional.isPresent()) {
-            return "Invalid email id.";
+            return new SendMailResponse<>("Email không tồn tại.", null);
         }
 
         UserEntity user = userOptional.get();
@@ -98,6 +89,7 @@ public class EmailSenderSeviceImpl implements EmailSenderService {
 
         this.mailSender.send(simpleMailMessage);
 
-        return user.getToken();
+//        return user.getToken();
+        return new SendMailResponse<>("Success", user.getToken());
     }
 }

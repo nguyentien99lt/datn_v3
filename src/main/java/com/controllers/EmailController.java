@@ -26,14 +26,6 @@ public class EmailController {
     @Autowired
     private IUserRepository userRepository;
 
-//    @Autowired
-//    private EmailSenderSeviceImpl emailSenderSevice;
-
-//    public EmailController(EmailSenderService emailSenderService) {
-//        this.emailSenderService = emailSenderService;
-//    }
-
-
     @PostMapping("/forgot-password")
     public ResponseEntity<SendMailResponse<String>> sendEmail(@RequestBody EmailMessage emailMessage, ForgotPasswordEmailDTO req){
 

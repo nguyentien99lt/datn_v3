@@ -34,13 +34,11 @@ public class EmailSenderSeviceImpl implements EmailSenderService {
         Optional<UserEntity> userOptional = userRepository.findByToken(token);
 
         if (!userOptional.isPresent()) {
-//            return "Invalid token.";
             return new SendMailResponse<>("Invalid token.", false);
         }
 
         LocalDateTime tokenCreationDate = userOptional.get().getTokenCreationDate();
         if (isTokenExpired(tokenCreationDate)) {
-//            return "Token expired.";
             return new SendMailResponse<>("Token expired.", false);
         }
 
@@ -48,8 +46,6 @@ public class EmailSenderSeviceImpl implements EmailSenderService {
         UserEntity user = userOptional.get();
         user.setPassword(password);
         userRepository.save(user);
-//        userRepository.delete(user);
-//        return "Success";
         return new SendMailResponse<>("Success.", true);
     }
     private String generateToken() {
@@ -88,8 +84,6 @@ public class EmailSenderSeviceImpl implements EmailSenderService {
         user = userRepository.save(user);
 
         this.mailSender.send(simpleMailMessage);
-
-//        return user.getToken();
         return new SendMailResponse<>("Success", user.getToken());
     }
 }

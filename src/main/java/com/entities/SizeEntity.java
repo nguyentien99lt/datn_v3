@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,9 +21,11 @@ public class SizeEntity {
     @Column(name = "id")
     private Integer id;
 
+    @NotNull(message = "Size cannot be null")
     @Column(name = "size")
     private Integer size;
 
+    @NotNull(message = "Status cannot be null")
     @Column(name = "status")
     private Integer status = 1;
 

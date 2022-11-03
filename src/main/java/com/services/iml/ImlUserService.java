@@ -57,7 +57,6 @@ public class ImlUserService implements IService<UserEntity> {
             user.setPassword(userEntity.getPassword());
             user.setPhone(userEntity.getPhone());
             user.setStatus(userEntity.getStatus());
-            user.setRole(userEntity.getRole());
             return userRepository.save(user);
         } else {
             return null;

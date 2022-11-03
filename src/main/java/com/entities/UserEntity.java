@@ -18,7 +18,7 @@ public class UserEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "name")
+    @Column(name = "username")
     private String name;
 
     @Column(name = "full_name")
@@ -42,10 +42,8 @@ public class UserEntity {
     @Column(name = "status")
     private Integer status = 1;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private RoleEntity role;
-
+    @Column(name = "token")
+    private String token;
 
 
 }

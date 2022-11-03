@@ -20,7 +20,7 @@ public class EmailSenderSeviceImpl implements EmailSenderService {
 
     private final JavaMailSender mailSender;
 
-    private static final long EXPIRE_TOKEN_AFTER_MINUTES = 30;
+
     @Autowired
     private IUserRepository userRepository;
 
@@ -37,10 +37,7 @@ public class EmailSenderSeviceImpl implements EmailSenderService {
             return new SendMailResponse<>("Invalid token.", false);
         }
 
-        LocalDateTime tokenCreationDate = userOptional.get().getTokenCreationDate();
-        if (isTokenExpired(tokenCreationDate)) {
-            return new SendMailResponse<>("Token expired.", false);
-        }
+
 
 
         UserEntity user = userOptional.get();
@@ -54,12 +51,7 @@ public class EmailSenderSeviceImpl implements EmailSenderService {
         return token.append(UUID.randomUUID().toString())
                 .append(UUID.randomUUID().toString()).toString();
     }
-    private boolean isTokenExpired(final LocalDateTime tokenCreationDate) {
-        LocalDateTime now = LocalDateTime.now();
-        Duration diff = Duration.between(tokenCreationDate, now);
 
-        return diff.toMinutes() >= EXPIRE_TOKEN_AFTER_MINUTES;
-    }
 
 
     @Override
@@ -80,7 +72,6 @@ public class EmailSenderSeviceImpl implements EmailSenderService {
 
         UserEntity user = userOptional.get();
         user.setToken(token_mail);
-        user.setTokenCreationDate(LocalDateTime.now());
         user = userRepository.save(user);
 
         this.mailSender.send(simpleMailMessage);

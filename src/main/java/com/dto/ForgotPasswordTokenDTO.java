@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 public class ForgotPasswordTokenDTO {
     @Column(name = "token")
     private String token;
-    @Column(name = "token_date")
-    private LocalDateTime tokenCreationDate;
     @Column(name = "password")
     private String password;
 }

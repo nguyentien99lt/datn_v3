@@ -14,7 +14,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/role")
+@RequestMapping("/admin/role")
 @CrossOrigin
 public class RoleController {
     @Autowired

@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @ResponseBody
-@RequestMapping("/brand")
+@RequestMapping("/admin/brand")
 @CrossOrigin("*")
 @Controller
 public class BrandController {

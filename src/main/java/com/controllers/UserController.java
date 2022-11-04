@@ -25,7 +25,7 @@ import com.services.iml.ImlUserService;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/admin/user")
 @CrossOrigin
 public class UserController {
 

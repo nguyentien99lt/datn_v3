@@ -3,7 +3,8 @@ package com.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 
 @Data
@@ -18,8 +19,8 @@ public class UserEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "username")
+    private String username;
 
     @Column(name = "full_name")
     private String fullName;
@@ -42,10 +43,11 @@ public class UserEntity {
     @Column(name = "status")
     private Integer status = 1;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private RoleEntity role;
+    @Column(name = "token")
+    private String token;
 
-
-
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_key") }, inverseJoinColumns = {
+            @JoinColumn(name = "role_key") })
+    private Set<Roles> roles = new HashSet<>();
 }

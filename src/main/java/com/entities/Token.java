@@ -1,18 +1,19 @@
 package com.entities;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "token")
-@Getter
-@Setter
-public class Token extends BaseEntity {
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Token {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
     @Column(length = 1000)
     private String token;
 

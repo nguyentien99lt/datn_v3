@@ -1,21 +1,20 @@
 package com.controllers;
 import javax.servlet.http.HttpSession;
 
+import com.entities.CartEntity;
+import com.repositories.ICartRepository;
+import com.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import lombok.extern.slf4j.Slf4j;
 
 import com.entities.Token;
 import com.entities.Users;
@@ -24,21 +23,26 @@ import com.security.UserPrincipal;
 import com.services.TokenService;
 import com.services.UserService;
 
-@Slf4j
 @RestController
 public class AuthController {
     @Autowired
     private UserService userService;
-
     @Autowired
     private TokenService tokenService;
-
     @Autowired
     private JwtUtil jwtUtil;
-
+    @Autowired
+    private IUserRepository userRepo;
+    @Autowired
+    private ICartRepository cartRepo;
     @PostMapping("/register")
     public Users create(@RequestBody Users user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        userService.createUser(user);
+        int userId = user.getId();
+        CartEntity cart = new CartEntity();
+        cart.setUser(userRepo.findById(userId).get());
+        cartRepo.save(cart);
         return userService.createUser(user);
     }
 

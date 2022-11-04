@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserPrincipal implements UserDetails {
-    private Long userId;
+    private int userId;
     private String username;
     private String email;
     private String password;

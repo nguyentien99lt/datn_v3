@@ -1,48 +1,28 @@
 package com.entities;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
 
+@Entity
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "users")
-public class UserEntity {
-
+public class Users{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
-
-    @Column(name = "username")
+    private int id;
     private String username;
-
-    @Column(name = "full_name")
-    private String fullName;
-
-    @Column(name = "password")
+    private String full_name;
     private String password;
-
-    @Column(name = "address")
     private String address;
-
-    @Column(name = "phone")
     private String phone;
-
-    @Column(name = "email")
     private String email;
-
-    @Column(name = "image")
     private String image;
-
-    @Column(name = "status")
-    private Integer status = 1;
-
+    private int status = 1;
     @Column(name = "token")
     private String token;
 

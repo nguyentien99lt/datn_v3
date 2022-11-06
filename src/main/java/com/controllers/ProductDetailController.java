@@ -15,7 +15,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/product-detail")
+@RequestMapping("/admin/product-detail")
 @CrossOrigin
 public class ProductDetailController {
     @Autowired

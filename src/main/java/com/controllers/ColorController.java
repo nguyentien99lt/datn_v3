@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/color")
+@RequestMapping("/admin/color")
 @CrossOrigin
 public class ColorController {
     @Autowired

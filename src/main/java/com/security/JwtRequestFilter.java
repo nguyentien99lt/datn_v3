@@ -1,5 +1,7 @@
 package com.security;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -41,7 +43,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             String jwt = authorizationHeader.substring(6);
             user = jwtUtil.getUserFromToken(jwt);
             token = verificationTokenService.findByToken(jwt);
-        }
+        } 
+//        else {
+//        	response.sendError(4444, "Vui lòng đăng nhập");
+//        }
 
         if (null != user && null != token && token.getTokenExpDate().after(new Date())) {
             Set<GrantedAuthority> authorities = new HashSet<>();

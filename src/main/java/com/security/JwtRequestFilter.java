@@ -44,9 +44,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             user = jwtUtil.getUserFromToken(jwt);
             token = verificationTokenService.findByToken(jwt);
         } 
-//        else {
-//        	response.sendError(4444, "Vui lòng đăng nhập");
-//        }
+        else {
+        	response.sendError(4444, "Vui lòng đăng nhập");
+        }
 
         if (null != user && null != token && token.getTokenExpDate().after(new Date())) {
             Set<GrantedAuthority> authorities = new HashSet<>();

@@ -1,67 +1,47 @@
 package com.security;
-import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
 
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import com.services.UserService;
-
-@Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class Config extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).csrf().disable();
-        http.csrf().disable();
-        http.authorizeRequests()
-                .antMatchers("/order/**").authenticated()
-                .antMatchers("/admin/user/update", "/admin/cart-detail/update").hasAuthority("MEMBER")
-                //update lai thong tin, gio hang cua minh
-                .antMatchers("/admin/**").hasAnyAuthority("ADMIN", "STAFF")
-                .antMatchers("/author/**").hasAuthority("ADMIN")
-                .anyRequest().permitAll();
-
-
-        http.formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/security/login")
-                .defaultSuccessUrl("/home", false)
-                .failureUrl("/login");
-
-        http.rememberMe()
-                .tokenValiditySeconds(86400);
-
-        http.exceptionHandling()
-                .accessDeniedPage("/unauthoried");
-
-        http.logout()
-                .logoutUrl("/logoff")
-                .logoutSuccessUrl("/logoff/success");
+@Component
+public class Config implements Filter{
+    public Config() {
     }
 
-    // Cơ chế mã hóa mật khẩu
-    @Bean
-    public BCryptPasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+            throws IOException, ServletException {
+
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
+
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT, HEAD, PATCH");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers",
+                "Access-Control-Allow-Headers,Origin,Content-Type,Accept,X-Requested-With");
+
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            chain.doFilter(req, res);
+        }
     }
 
-    // Cho phép truy xuất REST API từ domain khác
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
+    public void init(FilterConfig filterConfig) {
+    }
+
+    @Override
+    public void destroy() {
     }
 }

@@ -16,7 +16,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin/product-detail")
-@CrossOrigin
 public class ProductDetailController {
     @Autowired
     private ImlProductDetailService productDetailService;

@@ -26,7 +26,6 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/admin/category")
-@CrossOrigin
 public class CategoryController {
 
     @Autowired

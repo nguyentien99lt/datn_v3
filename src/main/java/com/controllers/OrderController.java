@@ -24,7 +24,6 @@ import com.services.iml.ImlOrderService;
 
 @RestController
 @RequestMapping("/order")
-@CrossOrigin
 public class OrderController {
     @Autowired
     private ImlOrderService orderService;

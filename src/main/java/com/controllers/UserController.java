@@ -29,7 +29,6 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/admin/user")
-@CrossOrigin
 public class UserController {
 
     @Autowired

@@ -18,7 +18,6 @@ import com.security.JwtUtil;
 import com.security.UserPrincipal;
 import com.services.TokenService;
 import com.services.UserService;
-@CrossOrigin("*")
 @RestController
 public class AuthController {
     @Autowired

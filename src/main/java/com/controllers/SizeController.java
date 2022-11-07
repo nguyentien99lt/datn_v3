@@ -14,7 +14,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin/size")
-@CrossOrigin
 public class SizeController {
     @Autowired
     private ImlSizeService sizeService;

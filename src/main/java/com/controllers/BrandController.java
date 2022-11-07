@@ -15,7 +15,6 @@ import java.util.Optional;
 
 @ResponseBody
 @RequestMapping("/admin/brand")
-@CrossOrigin("*")
 @Controller
 public class BrandController {
     @Autowired

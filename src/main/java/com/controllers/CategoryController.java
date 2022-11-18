@@ -25,7 +25,7 @@ import com.services.iml.ImlCategoryService;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/admin/category")
 @CrossOrigin
 public class CategoryController {
 

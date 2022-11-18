@@ -50,7 +50,7 @@ public class ImlUserService implements IService<UserEntity> {
         UserEntity user = userRepository.findById(userEntity.getId()).get();
         if (user != null) {
             user.setFullName(userEntity.getFullName());
-            user.setName(userEntity.getName());
+            user.setUsername(userEntity.getUsername());
             user.setImage(userEntity.getImage());
             user.setAddress(userEntity.getAddress());
             user.setEmail(userEntity.getEmail());

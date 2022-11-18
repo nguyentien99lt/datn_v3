@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/admin/product")
 @CrossOrigin
 public class ProductController {
     @Autowired

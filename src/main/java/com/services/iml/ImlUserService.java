@@ -1,7 +1,6 @@
 package com.services.iml;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.clients.requests.FindByPageRequest;
 import com.clients.responses.FindByPageResponse;
 import com.dto.UserDTO;
@@ -17,11 +15,14 @@ import com.entities.UserEntity;
 import com.repositories.IUserRepository;
 import com.services.IService;
 
+
 @Service
 public class ImlUserService implements IService<UserEntity> {
 
+
     @Autowired
     private IUserRepository userRepository;
+
 
 
     public FindByPageResponse<UserEntity> listAll(UserDTO dto,Integer pageNumber , Integer pageSize)
@@ -37,6 +38,7 @@ public class ImlUserService implements IService<UserEntity> {
         reponse.setTotalElement(page.getTotalElements());
         return reponse;
     }
+
 
     @Override
     public UserEntity create(UserEntity userEntity) {
@@ -114,6 +116,7 @@ public class ImlUserService implements IService<UserEntity> {
             return null;
         }
     }
+
 
 
 }

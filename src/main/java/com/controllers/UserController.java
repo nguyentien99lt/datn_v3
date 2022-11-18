@@ -15,10 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.repositories.ICartRepository;
-import com.repositories.IUserRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import com.entities.CartEntity;
+
 import com.clients.requests.FindByPageRequest;
 import com.clients.responses.FindByPageResponse;
 import com.dto.UserDTO;
@@ -28,16 +25,12 @@ import com.services.iml.ImlUserService;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/admin/user")
+@RequestMapping("/user")
 @CrossOrigin
 public class UserController {
 
     @Autowired
     private ImlUserService userService;
-    @Autowired
-    private IUserRepository userRepo;
-    @Autowired
-    private ICartRepository cartRepo;
 
     @PostMapping("/find-by-page")
     public FindByPageResponse<UserEntity> findByPage(@RequestBody FindByPageRequest finByPageRequest) {
@@ -64,12 +57,6 @@ public class UserController {
     @PostMapping("/create")
     public ResponseEntity<UserEntity> create( @Valid @RequestBody UserEntity user) throws  Exception {
         try {
-            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-            userService.create(user);
-            int userId = user.getId();
-            CartEntity cart = new CartEntity();
-            cart.setUser(userRepo.findById(userId).get());
-            cartRepo.save(cart);
             userService.create(user);
             return ResponseEntity.ok().body(user);
         }catch (Exception e){
